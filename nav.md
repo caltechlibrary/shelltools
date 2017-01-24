@@ -7,10 +7,9 @@
 + [findfile](findfile.html)
 + [finddir](finddir.html)
 + [mergepath](mergepath.html)
-+ [pathparts](pathparts.html)
 + [range](range.html)
 + [reldate](reldate.html)
 + [timefmt](timefmt.html)
 + [urlparse](urlparse.html)
-+ [Github](https://github.com/rsdoiel/shelltools)
++ [Github](https://github.com/caltechlibrary/shelltools)
 

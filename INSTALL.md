@@ -9,7 +9,7 @@ Compiled versions are available for Mac OS X (amd64 processor), Linux (amd64), W
 
 ### Mac OS X
 
-1. Download **shelltools-binary-release.zip** from [https://github.com/rsdoiel/shelltools/releases/latest](https://github.com/rsdoiel/shelltools/releases/latest)
+1. Download **shelltools-binary-release.zip** from [https://github.com/caltechlibrary/shelltools/releases/latest](https://github.com/caltechlibrary/shelltools/releases/latest)
 2. Open a finder window, find and unzip **shelltools-binary-release.zip**
 3. Look in the unziped folder and find *dist/macosx-amd64/*
 4. Drag (or copy) *findfile*, *finddir*, *mergepath*, *pathparts*, etc. to a "bin" directory in your path
@@ -17,7 +17,7 @@ Compiled versions are available for Mac OS X (amd64 processor), Linux (amd64), W
 
 ### Windows
 
-1. Download **shelltools-binary-release.zip** from [https://github.com/rsdoiel/shelltools/releases/latest](https://github.com/rsdoiel/shelltools/releases/latest)
+1. Download **shelltools-binary-release.zip** from [https://github.com/caltechlibrary/shelltools/releases/latest](https://github.com/caltechlibrary/shelltools/releases/latest)
 2. Open the file manager find and unzip **shelltools-binary-release.zip**
 3. Look in the unziped folder and find *dist/windows-amd64/*
 4. Drag (or copy) *findfile.exe*, *finddir.exe*, *mergepath*, *pathparts*, etc. to a "bin" directory in your path
@@ -25,7 +25,7 @@ Compiled versions are available for Mac OS X (amd64 processor), Linux (amd64), W
 
 ### Linux
 
-1. Download **shelltools-binary-release.zip** from [https://github.com/rsdoiel/shelltools/releases/latest](https://github.com/rsdoiel/shelltools/releases/latest)
+1. Download **shelltools-binary-release.zip** from [https://github.com/caltechlibrary/shelltools/releases/latest](https://github.com/caltechlibrary/shelltools/releases/latest)
 2. Find and unzip **shelltools-binary-release.zip**
 3. In the unziped directory and find for *dist/linux-amd64/*
 4. Copy *findfile*, *finddir*, *mergepath*, *pathparts*, etc. to a "bin" directory (e.g. cp ~/Downloads/shelltools-binary-release/dist/linux-amd64/\* ~/bin/)
@@ -35,7 +35,7 @@ Compiled versions are available for Mac OS X (amd64 processor), Linux (amd64), W
 
 If you are using a Raspberry Pi 2 or later use the ARM7 binary, ARM6 is only for the first generaiton Raspberry Pi.
 
-1. Download **shelltools-binary-release.zip** from [https://github.com/rsdoiel/shelltools/releases/latest](https://github.com/rsdoiel/shelltools/releases/latest)
+1. Download **shelltools-binary-release.zip** from [https://github.com/caltechlibrary/shelltools/releases/latest](https://github.com/caltechlibrary/shelltools/releases/latest)
 2. Find and unzip **shelltools-binary-release.zip**
 3. In the unziped directory and find for *dist/raspberrypi-arm7/*
 4. Copy *findfile*, *finddir*, *mergepath*, *pathparts*, etc. to a "bin" directory (e.g. cp ~/Downloads/shelltools-binary-release/dist/raspberrypi-arm7/\* ~/bin/)
@@ -50,7 +50,7 @@ package. You will need the GOBIN environment variable set. In this example I've 
 
 ```bash
     export GOBIN=$HOME/bin
-    go get github.com/rsdoiel/shelltools/...
+    go get github.com/caltechlibrary/shelltools/...
 ```
 
 Or for Windows 10 Powershell (assumes the Windows versions of Go and Git are previously installed)
@@ -58,14 +58,14 @@ Or for Windows 10 Powershell (assumes the Windows versions of Go and Git are pre
 
 ```powershell
     $Env:GOPATH = "$HOME"
-    go get github.com/rsdoiel/shelltools/...
+    go get github.com/caltechlibrary/shelltools/...
 ```
 
 or to install from source on Linux/Unix systems
 
 ```bash
-    git clone https://github.com/rsdoiel/shelltools src/github.com/rsdoiel/shelltools
-    cd src/github.com/rsdoiel/shelltools
+    git clone https://github.com/caltechlibrary/shelltools src/github.com/caltechlibrary/shelltools
+    cd src/github.com/caltechlibrary/shelltools
     make
     make test
     make install
@@ -75,8 +75,8 @@ Or for Windows 10 Powershell
 
 ```powershell
     $Env:GOBIN = "$HOME\bin"
-    git clone https://github.com/rsdoiel/shelltools src/github.com/rsdoiel/shelltools
-    cd src\github.com\rsdoiel\shelltools
+    git clone https://github.com/caltechlibrary/shelltools src/github.com/caltechlibrary/shelltools
+    cd src\github.com\caltechlibrary\shelltools
     go install cmds\csvcols\csvcols.go
     go install cmds\finddir\finddir.go
     go install cmds\findfile\filefile.go

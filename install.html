@@ -1,14 +1,35 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>shelltools -- a small collection of file and shell utilities</title>
-    <link href="css/site.css" rel="stylesheet" />
-<head>
+    <title>Caltech Library's Digital Library Development Sandbox</title>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="/css/site.css">
+</head>
 <body>
-    <header>
-        <h1>shelltools -- a small collection of file and shell utilities</h1>
-    </header>
-    <section><h1>Installation</h1>
+<header>
+<a href="http://library.caltech.edu"><img src="assets/liblogo.gif" alt="Caltech Library logo"></a>
+</header>
+<nav>
+<ul>
+<li><a href="/">home</a></li>
+<li><a href="./">shelltools</a></li>
+<li><a href="license.html">LICENSE</a></li>
+<li><a href="install.html">Install</a></li>
+<li><a href="csvcols.html">csvcols</a></li>
+<li><a href="findfile.html">findfile</a></li>
+<li><a href="finddir.html">finddir</a></li>
+<li><a href="mergepath.html">mergepath</a></li>
+<li><a href="range.html">range</a></li>
+<li><a href="reldate.html">reldate</a></li>
+<li><a href="timefmt.html">timefmt</a></li>
+<li><a href="urlparse.html">urlparse</a></li>
+<li><a href="https://github.com/caltechlibrary/shelltools">Github</a></li>
+</ul>
+
+</nav>
+
+<section>
+<h1>Installation</h1>
 
 <h2>Compiled version</h2>
 
@@ -19,7 +40,7 @@
 <h3>Mac OS X</h3>
 
 <ol>
-<li>Download <strong>shelltools-binary-release.zip</strong> from <a href="https://github.com/rsdoiel/shelltools/releases/latest">https://github.com/rsdoiel/shelltools/releases/latest</a></li>
+<li>Download <strong>shelltools-binary-release.zip</strong> from <a href="https://github.com/caltechlibrary/shelltools/releases/latest">https://github.com/caltechlibrary/shelltools/releases/latest</a></li>
 <li>Open a finder window, find and unzip <strong>shelltools-binary-release.zip</strong></li>
 <li>Look in the unziped folder and find <em>dist/macosx-amd64/</em></li>
 <li>Drag (or copy) <em>findfile</em>, <em>finddir</em>, <em>mergepath</em>, <em>pathparts</em>, etc. to a &ldquo;bin&rdquo; directory in your path</li>
@@ -29,7 +50,7 @@
 <h3>Windows</h3>
 
 <ol>
-<li>Download <strong>shelltools-binary-release.zip</strong> from <a href="https://github.com/rsdoiel/shelltools/releases/latest">https://github.com/rsdoiel/shelltools/releases/latest</a></li>
+<li>Download <strong>shelltools-binary-release.zip</strong> from <a href="https://github.com/caltechlibrary/shelltools/releases/latest">https://github.com/caltechlibrary/shelltools/releases/latest</a></li>
 <li>Open the file manager find and unzip <strong>shelltools-binary-release.zip</strong></li>
 <li>Look in the unziped folder and find <em>dist/windows-amd64/</em></li>
 <li>Drag (or copy) <em>findfile.exe</em>, <em>finddir.exe</em>, <em>mergepath</em>, <em>pathparts</em>, etc. to a &ldquo;bin&rdquo; directory in your path</li>
@@ -39,7 +60,7 @@
 <h3>Linux</h3>
 
 <ol>
-<li>Download <strong>shelltools-binary-release.zip</strong> from <a href="https://github.com/rsdoiel/shelltools/releases/latest">https://github.com/rsdoiel/shelltools/releases/latest</a></li>
+<li>Download <strong>shelltools-binary-release.zip</strong> from <a href="https://github.com/caltechlibrary/shelltools/releases/latest">https://github.com/caltechlibrary/shelltools/releases/latest</a></li>
 <li>Find and unzip <strong>shelltools-binary-release.zip</strong></li>
 <li>In the unziped directory and find for <em>dist/linux-amd64/</em></li>
 <li>Copy <em>findfile</em>, <em>finddir</em>, <em>mergepath</em>, <em>pathparts</em>, etc. to a &ldquo;bin&rdquo; directory (e.g. cp ~/Downloads/shelltools-binary-release/dist/linux-amd64/* ~/bin/)</li>
@@ -51,7 +72,7 @@
 <p>If you are using a Raspberry Pi 2 or later use the ARM7 binary, ARM6 is only for the first generaiton Raspberry Pi.</p>
 
 <ol>
-<li>Download <strong>shelltools-binary-release.zip</strong> from <a href="https://github.com/rsdoiel/shelltools/releases/latest">https://github.com/rsdoiel/shelltools/releases/latest</a></li>
+<li>Download <strong>shelltools-binary-release.zip</strong> from <a href="https://github.com/caltechlibrary/shelltools/releases/latest">https://github.com/caltechlibrary/shelltools/releases/latest</a></li>
 <li>Find and unzip <strong>shelltools-binary-release.zip</strong></li>
 <li>In the unziped directory and find for <em>dist/raspberrypi-arm7/</em></li>
 <li>Copy <em>findfile</em>, <em>finddir</em>, <em>mergepath</em>, <em>pathparts</em>, etc. to a &ldquo;bin&rdquo; directory (e.g. cp ~/Downloads/shelltools-binary-release/dist/raspberrypi-arm7/* ~/bin/)
@@ -68,19 +89,19 @@
 package. You will need the GOBIN environment variable set. In this example I&rsquo;ve set it to $HOME/bin.</p>
 
 <pre><code class="language-bash">    export GOBIN=$HOME/bin
-    go get github.com/rsdoiel/shelltools/...
+    go get github.com/caltechlibrary/shelltools/...
 </code></pre>
 
 <p>Or for Windows 10 Powershell (assumes the Windows versions of Go and Git are previously installed)</p>
 
 <pre><code class="language-powershell">    $Env:GOPATH = &quot;$HOME&quot;
-    go get github.com/rsdoiel/shelltools/...
+    go get github.com/caltechlibrary/shelltools/...
 </code></pre>
 
 <p>or to install from source on Linux/Unix systems</p>
 
-<pre><code class="language-bash">    git clone https://github.com/rsdoiel/shelltools src/github.com/rsdoiel/shelltools
-    cd src/github.com/rsdoiel/shelltools
+<pre><code class="language-bash">    git clone https://github.com/caltechlibrary/shelltools src/github.com/caltechlibrary/shelltools
+    cd src/github.com/caltechlibrary/shelltools
     make
     make test
     make install
@@ -89,8 +110,8 @@ package. You will need the GOBIN environment variable set. In this example I&rsq
 <p>Or for Windows 10 Powershell</p>
 
 <pre><code class="language-powershell">    $Env:GOBIN = &quot;$HOME\bin&quot;
-    git clone https://github.com/rsdoiel/shelltools src/github.com/rsdoiel/shelltools
-    cd src\github.com\rsdoiel\shelltools
+    git clone https://github.com/caltechlibrary/shelltools src/github.com/caltechlibrary/shelltools
+    cd src\github.com\caltechlibrary\shelltools
     go install cmds\csvcols\csvcols.go
     go install cmds\finddir\finddir.go
     go install cmds\findfile\filefile.go
@@ -100,28 +121,16 @@ package. You will need the GOBIN environment variable set. In this example I&rsq
     go install cmds\timefmt\timefmt.go
     go install cmds\urlparse\urlparse.go
 </code></pre>
+
 </section>
-    <nav><ul>
-<li><a href="/">home</a></li>
-<li><a href="./">shelltools</a></li>
-<li><a href="license.html">LICENSE</a></li>
-<li><a href="install.html">Install</a></li>
-<li><a href="csvcols.html">csvcols</a></li>
-<li><a href="findfile.html">findfile</a></li>
-<li><a href="finddir.html">finddir</a></li>
-<li><a href="jsoncols.html">jsoncols</a></li>
-<li><a href="mergepath.html">mergepath</a></li>
-<li><a href="pathparts.html">pathparts</a></li>
-<li><a href="range.html">range</a></li>
-<li><a href="reldate.html">reldate</a></li>
-<li><a href="timefmt.html">timefmt</a></li>
-<li><a href="urlparse.html">urlparse</a></li>
-<li><a href="https://github.com/rsdoiel/shelltools">Github</a></li>
-</ul>
-</nav>
-    <footer>
-    copyright &copy; 2014-2017 R. S. Doiel<br />
-    see: <a href="license.html">LICENSE</a>
-    </footer>
+
+<footer>
+<span><h1><A href="http://caltech.edu">Caltech</a></h1></span>
+<span>&copy; 2017 <a href="http://library.caltech.edu/CLS_Copyright.htm">Caltech library</a></span>
+<address>1200 E California Blvd, Mail Code 1-32, Pasadena, CA 91125-3200</address> 
+<span>Phone: <a href="tel:+1-626-395-3405">(626)395-3405</a></span>
+<span><a href="mailto:library@caltech.edu">Email Us</a></span>
+<a class="cl-hide" href="sitemap.xml">Site Map</a>
+</footer>
 </body>
 </html>
