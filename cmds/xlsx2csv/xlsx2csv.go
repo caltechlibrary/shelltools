@@ -33,19 +33,19 @@ import (
 )
 
 var (
-	usage = `USAGE: %s [OPTIONS] EXCEL_FILENAME SHEET_NAME [CSV_FILENAME]`
+	usage = `USAGE: %s [OPTIONS] EXCEL_WORKBOOK_NAME [SHEET_NAME]`
 
 	description = `
 SYNOPSIS
 
-%s is a tool to extract individual Excel sheets as CSV files from an Excel
-workbook in the .xlsx format.
+%s is a tool to extract individual Excel sheets as CSV output from an 
+Excel workbook in the .xlsx format. CSV content is written to Stdout.
 `
 
 	examples = `
 EXAMPLE
 
-    %s my-workbook.xls "Sheet 1" sheet1.csv
+    %s my-workbook.xls "Sheet 1" > sheet1.csv
 
 This would get the first sheet from the workbook and save it as a CSV file.
 `
@@ -56,13 +56,26 @@ This would get the first sheet from the workbook and save it as a CSV file.
 	showVersion bool
 
 	// Application Options
+	showSheetCount bool
+	showSheetNames bool
 	outputFilename string
 )
+
+func showSheetCount(workbookName string) (int, error) {
+	return 0, fmt.Errorf("showSheetCount() not implemented")
+}
+
+func showSheetNames(workbookName string) ([]string, error) {
+	return 0, fmt.Errorf("showSheetNames() not implemented")
+}
 
 func init() {
 	flag.BoolVar(&showHelp, "h", false, "display help")
 	flag.BoolVar(&showLicense, "l", false, "display license")
 	flag.BoolVar(&showVersion, "v", false, "display version")
+
+	flag.BoolVar(&showSheetCount, "c", false, "display number of sheets in Excel Workbook")
+	flag.BoolVar(&showSheetNames, "n", false, "display sheet names in Excel W9rkbook")
 }
 
 func main() {
@@ -90,4 +103,43 @@ func main() {
 		fmt.Println(cfg.Version())
 	}
 
+	if len(args) < 1 {
+		fmt.Println(cfg.Usage())
+		fmt.Fprintln(os.Stderr, "Missing Excel Workbook names")
+		os.Exit(1)
+	}
+
+	workBookName := args[0]
+	if showSheetCount == true {
+		if cnt, err := showSheetCount(workBookName); err == nil {
+			fmt.Printf("%d", cnt)
+			os.Exit(0)
+		} else {
+			fmt.Fprintf(os.Stderr, "%s, %s\n", workBookName, err)
+			os.Exit(1)
+		}
+	}
+
+	if showSheetNames == true {
+		if names, err := showSheetNames(workBookName); err == nil {
+			fmt.Println(strings.Join(names, "\n"))
+			os.Exit(0)
+		} else {
+			fmt.Fprintf(os.Stderr, "%s, %s\n", workBookName, err)
+			os.Exit(1)
+		}
+	}
+
+	if len(args) < 2 {
+		fmt.Fprintf(os.Stderr, "Missing worksheet name\n")
+		os.Exit(1)
+	}
+	for i, sheetName := range args[1:] {
+		src, err := xlsx2CSV(workBookName, sheetName)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "%s, %s, %s\n", workBookName, sheetName, err)
+			os.Exit(1)
+		}
+		fmt.Println(src)
+	}
 }
