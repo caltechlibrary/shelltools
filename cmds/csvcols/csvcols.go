@@ -99,7 +99,8 @@ func printCSVColumns(columnNos []int) {
 	}
 	fmt.Printf("%+v\n", records)
 	for _, record := range records {
-		if err := w.Write(selectedColumns(record, columnNos)); err != nil {
+		row := selectedColumns(record, columnNos)
+		if err := w.Write(row); err != nil {
 			fmt.Fprintf(os.Stderr, "error writing record to csv: %s\n", err)
 			os.Exit(1)
 		}
