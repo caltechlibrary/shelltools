@@ -97,7 +97,6 @@ func printCSVColumns(columnNos []int) {
 		fmt.Fprintf(os.Stderr, "Can't read stdin for CSV data, %s", err)
 		os.Exit(1)
 	}
-	fmt.Printf("%+v\n", records)
 	for _, record := range records {
 		row := selectedColumns(record, columnNos)
 		if err := w.Write(row); err != nil {
