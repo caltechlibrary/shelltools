@@ -23,13 +23,13 @@ import (
 	"fmt"
 	"os"
 	"path"
+	"strings"
 
 	// CaltechLibrary packages
 	"github.com/caltechlibrary/cli"
-	"github.com/clatechlibrary/shelltools"
-
+	"github.com/caltechlibrary/shelltools"
 	// 3rd Party packages
-	"github.com/tealeg/xlsx"
+	//"github.com/tealeg/xlsx"
 )
 
 var (
@@ -61,12 +61,16 @@ This would get the first sheet from the workbook and save it as a CSV file.
 	outputFilename string
 )
 
-func showSheetCount(workbookName string) (int, error) {
-	return 0, fmt.Errorf("showSheetCount() not implemented")
+func sheetCount(workbookName string) (int, error) {
+	return 0, fmt.Errorf("sheetCount() not implemented")
 }
 
-func showSheetNames(workbookName string) ([]string, error) {
-	return 0, fmt.Errorf("showSheetNames() not implemented")
+func sheetNames(workbookName string) ([]string, error) {
+	return []string{}, fmt.Errorf("sheetNames() not implemented")
+}
+
+func xlsx2CSV(workbookName, sheetName string) (string, error) {
+	return "", fmt.Errorf("xlsx2CSV() not implemented")
 }
 
 func init() {
@@ -111,7 +115,7 @@ func main() {
 
 	workBookName := args[0]
 	if showSheetCount == true {
-		if cnt, err := showSheetCount(workBookName); err == nil {
+		if cnt, err := sheetCount(workBookName); err == nil {
 			fmt.Printf("%d", cnt)
 			os.Exit(0)
 		} else {
@@ -121,7 +125,7 @@ func main() {
 	}
 
 	if showSheetNames == true {
-		if names, err := showSheetNames(workBookName); err == nil {
+		if names, err := sheetNames(workBookName); err == nil {
 			fmt.Println(strings.Join(names, "\n"))
 			os.Exit(0)
 		} else {
@@ -134,7 +138,7 @@ func main() {
 		fmt.Fprintf(os.Stderr, "Missing worksheet name\n")
 		os.Exit(1)
 	}
-	for i, sheetName := range args[1:] {
+	for _, sheetName := range args[1:] {
 		src, err := xlsx2CSV(workBookName, sheetName)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "%s, %s, %s\n", workBookName, sheetName, err)
