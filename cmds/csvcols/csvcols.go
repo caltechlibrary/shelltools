@@ -26,6 +26,7 @@ import (
 	"log"
 	"os"
 	"path"
+	"strconv"
 	"strings"
 
 	// My packages
@@ -40,6 +41,8 @@ var (
 SYNOPSIS
 
 %s converts a set of command line args into columns output in CSV format.
+It can also be used to filter input CSV and rendering only the column numbers
+listed on the commandline.
 `
 
 	examples = `
@@ -56,6 +59,10 @@ Example parsing a pipe delimited string into a CSV line
     %s -d "|" "one|two|three" > 3col.csv
     %s -delimiter "|" "1|2|3" >> 3col.csv
     cat 3col.csv
+
+Filter a 10 column CSV file for columns 0,3,5 (left most column is number zero)
+
+	cat 10col.csv | csvcols -f 0,3,5 > 3col.csv
 `
 
 	// Basic Options
@@ -64,8 +71,45 @@ Example parsing a pipe delimited string into a CSV line
 	showVersion bool
 
 	// App Options
-	delimiter string
+	delimiter     string
+	filterColumns bool
 )
+
+func selectedColumns(record []string, columnNos []int) []string {
+	result := []string{}
+	l := len(record)
+	for _, col := range columnNos {
+		if col >= 0 && col < l {
+			result = append(result, record[col])
+		} else {
+			// If we don't find the column, story an empty string
+			result = append(result, "")
+		}
+	}
+	return result
+}
+
+func printCSVColumns(columnNos []int) {
+	r := csv.NewReader(os.Stdin)
+	w := csv.NewWriter(os.Stdout)
+	records, err := r.ReadAll()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Can't read stdin for CSV data, %s", err)
+		os.Exit(1)
+	}
+	fmt.Printf("%+v\n", records)
+	for _, record := range records {
+		if err := w.Write(selectedColumns(record, columnNos)); err != nil {
+			fmt.Fprintf(os.Stderr, "error writing record to csv: %s\n", err)
+			os.Exit(1)
+		}
+	}
+	w.Flush()
+	if err := w.Error(); err != nil {
+		fmt.Fprintf(os.Stderr, "%s\n", err)
+		os.Exit(1)
+	}
+}
 
 func init() {
 	// Basic Options
@@ -79,6 +123,8 @@ func init() {
 	// App Options
 	flag.StringVar(&delimiter, "d", "", "set delimiter for conversion")
 	flag.StringVar(&delimiter, "delimiter", "", "set delimiter for conversion")
+	flag.BoolVar(&filterColumns, "f", false, "filter CSV input for columns requested")
+	flag.BoolVar(&filterColumns, "filter-columns", false, "filter CSV input for columns requested")
 }
 
 func main() {
@@ -106,6 +152,19 @@ func main() {
 	if showVersion == true {
 		fmt.Println(cfg.Version())
 		os.Exit(0)
+	}
+
+	if filterColumns == true {
+		columnNos := []int{}
+		for _, arg := range args {
+			i, err := strconv.Atoi(arg)
+			if err != nil {
+				fmt.Fprintf(os.Stderr, "Expected a column number (0 - n), %q, %s", arg, err)
+				os.Exit(1)
+			}
+			columnNos = append(columnNos, i)
+		}
+		printCSVColumns(columnNos)
 	}
 
 	if len(delimiter) > 0 && len(args) == 1 {
