@@ -62,7 +62,7 @@ Example parsing a pipe delimited string into a CSV line
 
 Filter a 10 column CSV file for columns 0,3,5 (left most column is number zero)
 
-	cat 10col.csv | csvcols -f 0,3,5 > 3col.csv
+	cat 10col.csv | csvcols -f 0 3 5 > 3col.csv
 `
 
 	// Basic Options
