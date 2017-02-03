@@ -107,26 +107,18 @@ dist/raspbian-arm6:
 	env CGO_ENABLED=0 GOOS=linux GOARCH=arm GOARM=6 go build -o dist/raspbian-arm6/timefmt cmds/timefmt/timefmt.go
 	env CGO_ENABLED=0 GOOS=linux GOARCH=arm GOARM=6 go build -o dist/raspbian-arm6/urlparse cmds/urlparse/urlparse.go
 
-dist:
+release: dist/linux-amd64 dist/macosx-amd64 dist/windows-amd64 dist/raspbian-arm7 dist/raspbian-arm6
 	mkdir -p dist
-
-dist/README.md: README.md
 	cp -v README.md dist/
-
-dist/LICENSE: LICENSE
 	cp -v LICENSE dist/
-
-dist/INSTALL.md: INSTALL.md
 	cp -v INSTALL.md dist/
-
-dist/demo:
 	cp -vR demo dist/
+	cp -v findfile.md dist/
+	cp -v finddir.md dist/
+	cp -v mergepath.md dist/
+	cp -v reldate.md dist/
+	cp -v range.md dist/
+	cp -v timefmt.md dist/
+	cp -v urlparse.md dist/
+	zip -r $(PROJECT)-$(VERSION)-release.zip dist/*
 
-targets: dist/linux-amd64 dist/macosx-amd64 dist/windows-amd64 dist/raspbian-arm7 dist/raspbian-arm6
-
-docs: dist dist/README.md dist/LICENSE dist/INSTALL.md dist/demo 
-
-zip: $(PROJECT)-$(VERSION)-release.zip 
-	zip -r $(PROJECT)-$(VERSION)-release.zip dist/
-
-release: targets docs zip
