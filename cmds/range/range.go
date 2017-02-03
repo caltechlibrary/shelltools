@@ -28,72 +28,78 @@ import (
 	"path"
 	"strconv"
 	"time"
+
+	// CaltechLibrary Packages
+	"github.com/caltechlibrary/cli"
+	"github.com/caltechlibrary/shelltools"
 )
 
-const version = "v1.0.1"
-
 var (
+	usage = `USAGE: %s [OPTIONS] START_INTEGER END_INTEGER [INCREMENT_INTEGER]`
+
+	description = `
+SYNOPSIS
+
+%s is a simple utility for shell scripts that emits a list of 
+integers starting with the first command line argument and 
+ending with the last integer command line argument.
+
+If the first argument is greater than the last then it counts 
+down otherwise it counts up.
+`
+
+	examples = `
+EXAMPLES
+	
+	%s 1 5
+
+Yields 1 2 3 4 5
+
+	%s -- -2 6
+
+Yields -2 -1 0 1 2 3 4 5 6
+
+	%s -increment=2 2 10
+
+Yields 2 4 6 8 10
+
+	%s 10 1
+
+Yields 10 9 8 7 6 5 4 3 2 1
+
+	%s -r 0 10
+
+Yields a random integer from 0 to 10
+`
+
+	// Standard Options
 	showVersion bool
 	showHelp    bool
 	showLicense bool
 
+	// Application Specific Options
 	start         int
 	end           int
 	increment     int
 	randomElement bool
 )
 
-var usage = func(exit_code int, msg string) {
-	var (
-		fh      = os.Stderr
-		appname = os.Args[0]
-	)
-
-	if exit_code == 0 {
-		fh = os.Stdout
-	}
-	fmt.Fprintf(fh, `%s
- USAGE %s STARTING_INTEGER ENDING_INTEGER [INCREMENT_INTEGER]
-
- EXAMPLES
-
- Count from one through five: 
-     %s 1 5
- Count from negative two to six: 
-     %s -- -2 6
- Count even numbers from two to ten: 
-     %s --increment=2 2 10
- Count down from ten to one: 
-     %s 10 1
- Pick a random number in range one and ten:
-     %s -r 1 10
- Pick a random even number in range two to twelve:
-     %s 12 --random --increment=2 2 12
-
- OPTIONS
-
-`, msg, appname, appname, appname, appname, appname, appname, appname)
-
-	flag.VisitAll(func(f *flag.Flag) {
-		fmt.Fprintf(fh, "\t-%s\t(defaults to %s) %s\n", f.Name, f.DefValue, f.Usage)
-	})
-
-	fmt.Fprintf(fh, `
-%s %s
-`, appname, version)
-	os.Exit(exit_code)
-}
-
 func init() {
 	const (
-		helpUsage    = "Display this help document."
-		versionUsage = "Display version"
-		licenseUsage = "Display license"
-		startUsage   = "The starting integer."
-		endUsage     = "The ending integer."
-		incUsage     = "The non-zero integer increment value."
+		startUsage = "The starting integer."
+		endUsage   = "The ending integer."
+		incUsage   = "The non-zero integer increment value."
 	)
 
+	// Standard Options
+	flag.BoolVar(&showHelp, "help", false, "display help")
+	flag.BoolVar(&showHelp, "h", false, "display help")
+	flag.BoolVar(&showLicense, "l", false, "display license")
+	flag.BoolVar(&showLicense, "license", false, "display license")
+	flag.BoolVar(&showVersion, "v", false, "display version")
+	flag.BoolVar(&showVersion, "version", false, "display version")
+
+	// App specific options
 	flag.IntVar(&start, "start", 0, startUsage)
 	flag.IntVar(&start, "s", 0, startUsage)
 	flag.IntVar(&end, "end", 0, endUsage)
@@ -102,18 +108,12 @@ func init() {
 	flag.IntVar(&increment, "i", 1, incUsage)
 	flag.BoolVar(&randomElement, "r", false, "Pick a range value from range")
 	flag.BoolVar(&randomElement, "random", false, "Pick a range value from range")
-
-	flag.BoolVar(&showHelp, "help", showHelp, helpUsage)
-	flag.BoolVar(&showHelp, "h", showHelp, helpUsage)
-	flag.BoolVar(&showVersion, "v", showVersion, versionUsage)
-	flag.BoolVar(&showVersion, "version", showVersion, versionUsage)
-	flag.BoolVar(&showLicense, "l", showLicense, licenseUsage)
-	flag.BoolVar(&showLicense, "license", showLicense, licenseUsage)
 }
 
 func assertOk(e error, failMsg string) {
 	if e != nil {
-		usage(1, fmt.Sprintf(" %s\n %s\n", failMsg, e))
+		fmt.Fprintf(os.Stderr, " %s\n %s\n", failMsg, e)
+		os.Exit(1)
 	}
 }
 
@@ -130,30 +130,24 @@ func inRange(i, start, end int) bool {
 func main() {
 	appName := path.Base(os.Args[0])
 	flag.Parse()
+	// Configuration and command line interation
+	cfg := cli.New(appName, appName, fmt.Sprintf(shelltools.LicenseText, appName, shelltools.Version), shelltools.Version)
+	cfg.UsageText = fmt.Sprintf(usage, appName)
+	cfg.DescriptionText = fmt.Sprintf(description, appName)
+	cfg.ExampleText = fmt.Sprintf(examples, appName, appName, appName, appName, appName)
+
 	if showHelp == true {
-		usage(0, "")
-	}
-	if showVersion == true {
-		fmt.Printf("Version %s\n", version)
+		fmt.Println(cfg.Usage())
 		os.Exit(0)
 	}
+
 	if showLicense == true {
-		fmt.Printf(`
-%s %s
+		fmt.Println(cfg.License())
+		os.Exit(0)
+	}
 
-Copyright (c) 2017, Caltech
-All rights not granted herein are expressly reserved by Caltech.
-
-Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-
-1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
-
-2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
-
-3. Neither the name of the copyright holder nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
-
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-`, appName, version)
+	if showVersion == true {
+		fmt.Println(cfg.Version())
 		os.Exit(0)
 	}
 
@@ -161,9 +155,11 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 	argv := flag.Args()
 
 	if argc < 2 {
-		usage(1, "Must include start and end integers.")
+		fmt.Fprintf(os.Stderr, "Must include start and end integers.")
+		os.Exit(1)
 	} else if argc > 3 {
-		usage(1, "Too many command line arguments.")
+		fmt.Fprintf(os.Stderr, "Too many command line arguments.")
+		os.Exit(1)
 	}
 
 	start, err := strconv.Atoi(argv[0])

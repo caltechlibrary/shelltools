@@ -1,8 +1,8 @@
 
 + [home](/)
-+ [shelltools](./)
++ [README](./)
 + [LICENSE](license.html)
-+ [Install](install.html)
++ [INSTALL](install.html)
 + [findfile](findfile.html)
 + [finddir](finddir.html)
 + [mergepath](mergepath.html)

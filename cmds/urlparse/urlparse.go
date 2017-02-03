@@ -24,10 +24,58 @@ import (
 	"os"
 	"path"
 	"strings"
+
+	// CaltechLibrary Packages
+	"github.com/caltechlibrary/cli"
+	"github.com/caltechlibrary/shelltools"
 )
 
 var (
-	help          bool
+	usage = `USAGE: %s [OPTIONS] URL_TO_PARSE`
+
+	description = `
+SYNOPSIS
+
+%s can parse a URL and return the specific elements
+requested (e.g. protocol, hostname, path, query string)
+`
+
+	examples = `
+EXAMPLE
+
+With no options returns "http\texample.com\t/my/page.html"
+
+    %s http://example.com/my/page.html
+
+Get protocol. Returns "http".
+
+    %s --protocol http://example.com/my/page.html
+
+Get host or domain name.  Returns "example.com".
+
+    %s --host http://example.com/my/page.html
+
+Get path. Returns "/my/page.html".
+
+    %s --path http://example.com/my/page.html
+
+Get basename. Returns "page.html".
+
+    %s --basename http://example.com/my/page.html
+
+Get extension. Returns ".html".
+
+    %s --extension http://example.com/my/page.html
+
+Without options urlparse returns protocol, host and path
+fields separated by a tab.
+`
+	// Standard Options
+	showHelp    bool
+	showLicense bool
+	showVersion bool
+
+	// App Specific Options
 	showProtocol  bool
 	showHost      bool
 	showPort      bool
@@ -40,66 +88,9 @@ var (
 	delimiter     = "\t"
 )
 
-var usage = func(exit_code int, msg string) {
-	var fh = os.Stderr
-	if exit_code == 0 {
-		fh = os.Stdout
-	}
-	fmt.Fprintf(fh, `%s
- USAGE %s [OPTIONS] URL_TO_PARSE
-
- Display the parsed URL as delimited fields on one line.
- The default parts to show are protocol, host and path.
-
- EXAMPLES
-
- With no options returns "http\texample.com\t/my/page.html"
-
-     %s http://example.com/my/page.html
-
- Get protocol. Returns "http".
- 
-     %s --protocol http://example.com/my/page.html
-
-
- Get host or domain name.  Returns "example.com".
- 
-     %s --host http://example.com/my/page.html
-
-
- Get path. Returns "/my/page.html".
- 
-     %s --path http://example.com/my/page.html
-
-
- Get basename. Returns "page.html".
- 
-     %s --basename http://example.com/my/page.html
-
-
- Get extension. Returns ".html".
- 
-     %s --extension http://example.com/my/page.html
-
-
- Without options urlparse returns protocol, host and path
- fields separated by a tab.
-
- OPTIONS
-
-`, msg, os.Args[0], os.Args[0], os.Args[0],
-		os.Args[0], os.Args[0], os.Args[0],
-		os.Args[0])
-	flag.VisitAll(func(f *flag.Flag) {
-		fmt.Fprintf(fh, "  -%s\t%s\n", f.Name, f.Usage)
-	})
-	os.Exit(exit_code)
-}
-
 func init() {
 	const (
 		delimiterUsage = "Set the output delimited for parsed display. (defaults to tab)"
-		helpUsage      = "Display this help document."
 		protocolUsage  = "Display the protocol of URL (defaults to http)"
 		hostUsage      = "Display the hostname (and port if specified) found in URL."
 		pathUsage      = "Display the path after the hostname."
@@ -108,6 +99,15 @@ func init() {
 		extensionUsage = "Display the filename extension (e.g. .html)."
 	)
 
+	// Standard Options
+	flag.BoolVar(&showHelp, "help", false, "display help")
+	flag.BoolVar(&showHelp, "h", false, "display help")
+	flag.BoolVar(&showLicense, "l", false, "display license")
+	flag.BoolVar(&showLicense, "license", false, "display license")
+	flag.BoolVar(&showVersion, "v", false, "display verison")
+	flag.BoolVar(&showVersion, "version", false, "display version")
+
+	// App Specific Options
 	flag.StringVar(&delimiter, "delimiter", delimiter, delimiterUsage)
 	flag.StringVar(&delimiter, "D", delimiter, delimiterUsage)
 	flag.BoolVar(&showProtocol, "protocol", false, protocolUsage)
@@ -122,20 +122,38 @@ func init() {
 	flag.BoolVar(&showBase, "b", false, basenameUsage)
 	flag.BoolVar(&showExtension, "extension", false, extensionUsage)
 	flag.BoolVar(&showExtension, "e", false, extensionUsage)
-
-	flag.BoolVar(&help, "help", help, helpUsage)
-	flag.BoolVar(&help, "h", help, helpUsage)
 }
 
 func main() {
-	var results []string
+	appName := path.Base(os.Args[0])
 	flag.Parse()
-	if help == true {
-		usage(0, "")
+
+	// Configuration and command line interation
+	cfg := cli.New(appName, appName, fmt.Sprintf(shelltools.LicenseText, appName, shelltools.Version), shelltools.Version)
+	cfg.UsageText = fmt.Sprintf(usage, appName)
+	cfg.DescriptionText = fmt.Sprintf(description, appName)
+	cfg.ExampleText = fmt.Sprintf(examples, appName, appName, appName, appName, appName, appName)
+
+	if showHelp == true {
+		fmt.Println(cfg.Usage())
+		os.Exit(0)
 	}
+
+	if showLicense == true {
+		fmt.Println(cfg.License())
+		os.Exit(0)
+	}
+
+	if showVersion == true {
+		fmt.Println(cfg.Version())
+		os.Exit(0)
+	}
+
+	results := []string{}
 	urlToParse := flag.Arg(0)
 	if urlToParse == "" {
-		usage(1, "Missing URL to parse")
+		fmt.Fprintf(os.Stderr, "Missing URL to parse")
+		os.Exit(1)
 	}
 	u, err := url.Parse(urlToParse)
 	if err != nil {
@@ -169,5 +187,4 @@ func main() {
 	} else {
 		fmt.Fprint(os.Stdout, strings.Join(results, useDelim))
 	}
-	os.Exit(0)
 }

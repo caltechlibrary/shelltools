@@ -12,9 +12,9 @@
 <nav>
 <ul>
 <li><a href="/">home</a></li>
-<li><a href="./">shelltools</a></li>
+<li><a href="./">README</a></li>
 <li><a href="license.html">LICENSE</a></li>
-<li><a href="install.html">Install</a></li>
+<li><a href="install.html">INSTALL</a></li>
 <li><a href="findfile.html">findfile</a></li>
 <li><a href="finddir.html">finddir</a></li>
 <li><a href="mergepath.html">mergepath</a></li>
@@ -28,36 +28,64 @@
 </nav>
 
 <section>
-<h1>range</h1>
+<h1>USAGE</h1>
 
-<p>Range is a simple utility for shell scripts that emits a list of integers starting with the first command line argument and ending with the last integer command line argument.</p>
+<pre><code>range [OPTIONS] START_INTEGER END_INTEGER [INCREMENT_INTEGER]
+</code></pre>
 
-<p>If the first argument is greater than the last then it counts down otherwise it counts up.</p>
+<h2>SYNOPSIS</h2>
 
-<h2>USAGE</h2>
+<p>range is a simple utility for shell scripts that emits a list of
+integers starting with the first command line argument and
+ending with the last integer command line argument.</p>
 
-<pre><code>    range [OPTIONS] STARTING_INTEGER ENDING_INTEGER [INCREMENT_INTEGER]
+<p>If the first argument is greater than the last then it counts
+down otherwise it counts up.</p>
+
+<h2>OPTIONS</h2>
+
+<pre><code>	-e	The ending integer.
+	-end	The ending integer.
+	-h	display help
+	-help	display help
+	-i	The non-zero integer increment value.
+	-increment	The non-zero integer increment value.
+	-l	display license
+	-license	display license
+	-r	Pick a range value from range
+	-random	Pick a range value from range
+	-s	The starting integer.
+	-start	The starting integer.
+	-v	display version
+	-version	display version
 </code></pre>
 
 <h2>EXAMPLES</h2>
 
-<ul>
-<li>Count from one through five: range 1 5</li>
-<li>Count from negative two to six: range &ndash; -2 6</li>
-<li>Count even number from two to ten: range &ndash;increment=2 2 10</li>
-<li>Count down from ten to one: range 10 1</li>
-<li>Pick a value from a range: range -r 0 10</li>
-</ul>
+<pre><code>	range 1 5
+</code></pre>
 
-<h2>OPTIONS</h2>
+<p>Yields 1 2 3 4 5</p>
 
-<ul>
-<li><em>-e</em>, <em>&ndash;end</em> The ending integer (e.g. 10)</li>
-<li><em>-h</em>, <em>&ndash;help</em> Display this help document.</li>
-<li><em>-i</em>, <em>&ndash;increment</em> The non-zero integer value to increment by (e.g. 1 or -1)</li>
-<li><em>-s</em>, <em>&ndash;start</em> The starting integer (e.g. 1)</li>
-<li><em>-r</em>, <em>&ndash;random</em> Pick a random element from a range</li>
-</ul>
+<pre><code>	range -- -2 6
+</code></pre>
+
+<p>Yields -2 -1 0 1 2 3 4 5 6</p>
+
+<pre><code>	range -increment=2 2 10
+</code></pre>
+
+<p>Yields 2 4 6 8 10</p>
+
+<pre><code>	range 10 1
+</code></pre>
+
+<p>Yields 10 9 8 7 6 5 4 3 2 1</p>
+
+<pre><code>	range -r 0 10
+</code></pre>
+
+<p>Yields a random integer from 0 to 10</p>
 
 </section>
 

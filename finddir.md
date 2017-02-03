@@ -1,27 +1,43 @@
 
-# finddir
+# USAGE
 
-Lists directories recursively. Can be constrained by prefix, suffix or
-basename contents (e.g. contains).
+    finddir [OPTIONS] [TARGET] [DIRECTORIES_TO_SEARCH]
 
-## USAGE
+## SYNOPSIS
 
-```
-    finddir [OPTIONS] [TARGET_FILENAME] [DIRECTORIES_TO_SEARCH]
-```
+finddir finds directory based on matching prefix, suffix or contained text in base filename.
 
-Finds directories based on matching prefix, suffix or contained text in base filename.
+## OPTIONS
 
 ```
-    -c, -contains	find file(s) based on basename containing text
-    -d, -depth	    limit depth of directories walked
-    -e, -error-stop	Stop walk on file system errors (e.g. permissions)
-    -f, -full-path	list full path for files found
-    -h, -help	    display this help message
-    -l, -license	display license information
-    -m, -mod-time	display file modification time before the path
-    -p, -prefix	    find file(s) based on basename prefix
-    -s, -suffix	    find file(s) based on basename suffix
-    -v, -version	display version message
+	-c	find file(s) based on basename containing text
+	-contains	find file(s) based on basename containing text
+	-d	Limit depth of directories walked
+	-depth	Limit depth of directories walked
+	-e	Stop walk on file system errors (e.g. permissions)
+	-error-stop	Stop walk on file system errors (e.g. permissions)
+	-f	list full path for files found
+	-full-path	list full path for files found
+	-h	display this help message
+	-help	display this help message
+	-l	display license information
+	-license	display license information
+	-m	display file modification time before the path
+	-mod-time	display file modification time before the path
+	-p	find file(s) based on basename prefix
+	-prefix	find file(s) based on basename prefix
+	-s	find file(s) based on basename suffix
+	-suffix	find file(s) based on basename suffix
+	-v	display version message
+	-version	display version message
+
 ```
+
+## EXAMPLE
+
+```
+	finddir -p img
+```
+
+Find all subdirectories starting with "img". 
 

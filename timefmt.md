@@ -1,19 +1,43 @@
 
-# timefmt
+# USAGE
 
-Formats timestamps based on Golang's [time formatting](https://golang.org/pkg/time/#Time.Format).
+    timefmt [OPTIONS] TIME_STRING_TO_CONVERT
 
-## Examples
+## SYNOPSIS
+
+timefmt formats the current date or INPUT_DATE based on the output format
+provided in options. The default input and  output format is RFC3339. 
+Formats are specified based on Golang's time package including the
+common constants (e.g. RFC822, RFC1123). 
+
+For details see https://golang.org/pkg/time/#Time.Format.
+
+One additional time layout provided by timefmt 
+ 
++ mysql "2006-01-02 15:04:05 -0700" 
+
+## OPTIONS
+
+```
+	-h	display help
+	-input	Set format for input
+	-l	display license
+	-output	Set format for output
+	-utc	timestamps in UTC
+	-v	display version
+```
+
+## EXAMPLES
 
 ```
     timefmt -input "2006-01-02" -output "01/02/2006" "2016-07-02"
 ```
 
-Outputs *07/02/2016*
+Yields "07/02/2016"
 
 ```
     timefmt -input mysql -output RFC822  "2016-07-02 08:08:08"
 ```
 
-Outputs *02 Jul 16 08:08 UTC* 
+Yields "02 Jul 16 08:08 UTC"
 

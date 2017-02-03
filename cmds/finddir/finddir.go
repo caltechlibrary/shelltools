@@ -25,17 +25,39 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path"
 	"path/filepath"
 	"strings"
 	"time"
+
+	// CaltechLibrary packages
+	"github.com/caltechlibrary/cli"
+	"github.com/caltechlibrary/shelltools"
 )
 
-const version = "v0.0.11"
-
 var (
-	showHelp             bool
-	showVersion          bool
-	showLicense          bool
+	usage = `USAGE: %s [OPTIONS] [TARGET] [DIRECTORIES_TO_SEARCH]`
+
+	description = `
+SYNOPSIS
+
+%s finds directory based on matching prefix, suffix or contained text in base filename.
+`
+
+	examples = `
+EXAMPLE
+
+	%s -p img
+
+Find all subdirectories starting with "img". 
+`
+
+	// Standard Options
+	showHelp    bool
+	showVersion bool
+	showLicense bool
+
+	// Application Options
 	showModificationTime bool
 	findPrefix           bool
 	findContains         bool
@@ -98,12 +120,15 @@ func walkPath(docroot string, target string) error {
 }
 
 func init() {
+	// Standard Options
 	flag.BoolVar(&showHelp, "h", false, "display this help message")
 	flag.BoolVar(&showHelp, "help", false, "display this help message")
-	flag.BoolVar(&showVersion, "v", false, "display version message")
-	flag.BoolVar(&showVersion, "version", false, "display version message")
 	flag.BoolVar(&showLicense, "l", false, "display license information")
 	flag.BoolVar(&showLicense, "license", false, "display license information")
+	flag.BoolVar(&showVersion, "v", false, "display version message")
+	flag.BoolVar(&showVersion, "version", false, "display version message")
+
+	// Application Specific Options
 	flag.BoolVar(&showModificationTime, "m", false, "display file modification time before the path")
 	flag.BoolVar(&showModificationTime, "mod-time", false, "display file modification time before the path")
 	flag.BoolVar(&stopOnErrors, "e", false, "Stop walk on file system errors (e.g. permissions)")
@@ -122,52 +147,38 @@ func init() {
 }
 
 func main() {
+	appName := path.Base(os.Args[0])
 	flag.Parse()
 	args := flag.Args()
+
+	// Configuration and command line interation
+	cfg := cli.New(appName, appName, fmt.Sprintf(shelltools.LicenseText, appName, shelltools.Version), shelltools.Version)
+	cfg.UsageText = fmt.Sprintf(usage, appName)
+	cfg.DescriptionText = fmt.Sprintf(description, appName)
+	cfg.ExampleText = fmt.Sprintf(examples, appName)
+
+	if showHelp == true {
+		fmt.Println(cfg.Usage())
+		os.Exit(0)
+	}
+
+	if showLicense == true {
+		fmt.Println(cfg.License())
+		os.Exit(0)
+	}
+
+	if showVersion == true {
+		fmt.Println(cfg.Version())
+		os.Exit(0)
+	}
 
 	if findPrefix == false && findSuffix == false && findContains == false {
 		findAll = true
 	}
 
-	if showVersion == true {
-		fmt.Printf("Version %s\n", version)
-		os.Exit(0)
-	}
-
-	if showLicense == true {
-		fmt.Println(`
-Copyright (c) 2017, Caltech
-All rights not granted herein are expressly reserved by Caltech.
-
-Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-
-1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
-
-2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
-
-3. Neither the name of the copyright holder nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
-
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-`)
-		os.Exit(0)
-	}
-
-	if showHelp == true || (findAll == false && len(args) == 0) {
-		fmt.Printf(`USAGE finddir [OPTIONS] [TARGET_FILENAME] [DIRECTORIES_TO_SEARCH]
-
-  Finds directories based on matching prefix, suffix or contained text in base filename.
-
-`)
-		flag.VisitAll(func(f *flag.Flag) {
-			if len(f.Name) > 1 {
-				fmt.Printf("    -%s, -%s\t%s\n", f.Name[0:1], f.Name, f.Usage)
-			}
-		})
-		fmt.Printf("\n\nVersion %s\n", version)
-		if showHelp == false {
-			os.Exit(1)
-		}
-		os.Exit(0)
+	if findAll == false && len(args) == 0 {
+		fmt.Println(cfg.Usage())
+		os.Exit(1)
 	}
 
 	// Shift the target directory name so args holds the directories to search

@@ -22,42 +22,46 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"path"
 	"strings"
+
+	// CaltechLibrary packages
+	"github.com/caltechlibrary/cli"
+	"github.com/caltechlibrary/shelltools"
 )
 
 var (
+	usage = `USAGE: %s NEW_PATH_PARTS`
+
+	description = `
+SYNOPSIS
+
+%s can merge the new path parts with the existing path with creating duplications.
+It can also re-order existing path elements by prefixing or appending to the existing
+path and removing the resulting duplicate.
+`
+
+	examples = `
+EXAMPLE
+
+	export PATH=$(%s -p $HOME/bin)
+
+This would put your home bin directory at the beginning of your path.
+`
+
+	// Standard Options
+	showHelp    bool
+	showLicense bool
+	showVersion bool
+
+	// Application Specific Options
+
 	envPath     string
 	dir         string
-	showHelp    bool
 	appendPath  = true
 	prependPath = false
 	clipPath    = false
 )
-
-var usage = func(exit_code int, msg string) {
-	var fh = os.Stderr
-
-	if exit_code == 0 {
-		fh = os.Stdout
-	}
-	fmt.Fprintf(fh, `%s
- USAGE %s [OPTIONS] PATH_TO_ADD PATH_TO_MODIFY
-
- EXAMPLES
-
-    append work directory to existing path: %s . $PATH
-    prepend working directory to existing path: %s -P . $PATH
-
- OPTIONS
-
-`, msg, os.Args[0], os.Args[0], os.Args[0])
-	flag.VisitAll(func(f *flag.Flag) {
-		if len(f.Name) > 1 {
-			fmt.Fprintf(fh, "    -%s, -%s\t%s\n", f.Name[0:1], f.Name, f.Usage)
-		}
-	})
-	os.Exit(exit_code)
-}
 
 func init() {
 	const (
@@ -68,8 +72,12 @@ func init() {
 		clipUsage    = "Remove a directory from the path"
 		helpUsage    = "This help document."
 	)
-	flag.BoolVar(&showHelp, "h", false, helpUsage)
-	flag.BoolVar(&showHelp, "help", false, helpUsage)
+	flag.BoolVar(&showHelp, "h", false, "display help")
+	flag.BoolVar(&showHelp, "help", false, "display help")
+	flag.BoolVar(&showLicense, "l", false, "display license")
+	flag.BoolVar(&showLicense, "license", false, "display license")
+	flag.BoolVar(&showVersion, "v", false, "display version")
+	flag.BoolVar(&showVersion, "version", false, "display version")
 
 	envPath = "$PATH"
 
@@ -98,10 +106,28 @@ func clip(envPath string, dir string) string {
 }
 
 func main() {
+	appName := path.Base(os.Args[0])
 	flag.Parse()
 
+	// Configuration and command line interation
+	cfg := cli.New(appName, appName, fmt.Sprintf(shelltools.LicenseText, appName, shelltools.Version), shelltools.Version)
+	cfg.UsageText = fmt.Sprintf(usage, appName)
+	cfg.DescriptionText = fmt.Sprintf(description, appName)
+	cfg.ExampleText = fmt.Sprintf(examples, appName)
+
 	if showHelp == true {
-		usage(0, "")
+		fmt.Println(cfg.Usage())
+		os.Exit(0)
+	}
+
+	if showLicense == true {
+		fmt.Println(cfg.License())
+		os.Exit(0)
+	}
+
+	if showVersion == true {
+		fmt.Println(cfg.Version())
+		os.Exit(0)
 	}
 
 	if flag.NArg() > 0 {
@@ -115,7 +141,8 @@ func main() {
 		envPath = os.Getenv("PATH")
 	}
 	if dir == "" {
-		usage(1, "Missing directory to add to path")
+		fmt.Fprintf(os.Stderr, "Missing directory to add to path")
+		os.Exit(1)
 	}
 	if clipPath == true {
 		fmt.Printf("%s", clip(envPath, dir))
