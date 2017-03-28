@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 
-WORKING_BRANCH=$(git branch | grep '* ' | cut -d\  -f 2)
+WORKING_BRANCH=$(git branch | grep -E "\* " | cut -d\  -f 2)
 if [ "$WORKING_BRANCH" = "gh-pages" ]; then
     git commit -am "publishing to gh-pages branch"
     git push origin gh-pages
@@ -11,7 +11,7 @@ else
     read -p "Pull into gh-pages and publish? Y/N " YES_NO
     if [ "$YES_NO" = "Y" ] || [ "$YES_NO" = "y" ]; then
         echo "Committing and pushing to $WORKING_BRANCH"
-        git commit -am "commiting to $WORKING_BANCH";
+        git commit -am "commiting to $WORKING_BRANCH";
         git push origin "$WORKING_BRANCH";
         echo "Changing branchs from $WORKING_BRANCH to gh-pages";
         git checkout gh-pages

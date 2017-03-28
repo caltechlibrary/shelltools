@@ -42,7 +42,8 @@ SYNOPSIS
 
 %s is a simple utility for shell scripts that emits a list of 
 integers starting with the first command line argument and 
-ending with the last integer command line argument.
+ending with the last integer command line argument. It is a 
+subset of functionality found in the Unix seq command.
 
 If the first argument is greater than the last then it counts 
 down otherwise it counts up.

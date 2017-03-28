@@ -9,6 +9,7 @@
 # someday maybe
 
 + Include demo Bash scripts
-+ jsontype to determine a dot path's content type (text, integer, float, array, map, and psuedo types)
-+ jsonrange (or just improve range) to support iterating over JSON arrays and maps
++ Add support to increment with letters (e.g. a to z, aa to zz, A to Z)
++ Add support to incremenet over floats
++ Integrate jsonrange features into range
 
