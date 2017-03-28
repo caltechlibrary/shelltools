@@ -12,7 +12,7 @@ Various utilities for simplifying work on the command line.
 + [urlparse](urlparse.html) - split a URL into parts
 
 Compiled versions are provided for Linux (amd64), Mac OS X (amd64),
-Windows 10 (amd64) and Raspbian (ARM6, ARM7). See https://github.com/caltechlibrary/shelltools.
+Windows 10 (amd64) and Raspbian (ARM7). See https://github.com/caltechlibrary/shelltools/releases.
 
 Use the utilities try "-help" option for a full list of options.
 
