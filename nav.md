@@ -3,12 +3,6 @@
 + [README](./)
 + [LICENSE](license.html)
 + [INSTALL](install.html)
-+ [findfile](findfile.html)
-+ [finddir](finddir.html)
-+ [mergepath](mergepath.html)
-+ [range](range.html)
-+ [reldate](reldate.html)
-+ [timefmt](timefmt.html)
-+ [urlparse](urlparse.html)
++ [Documentation](docs/)
 + [Github](https://github.com/caltechlibrary/shelltools)
 
