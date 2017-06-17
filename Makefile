@@ -51,7 +51,6 @@ publish:
 clean: 
 	if [ -d bin ]; then /bin/rm -fR bin; fi
 	if [ -d dist ]; then /bin/rm -fR dist; fi
-	if [ -f $(PROJECT)-$(VERSION)-release.zip ]; then rm -f $(PROJECT)-$(VERSION)-release.zip; fi
 
 install:
 	env GOBIN=$(HOME)/bin go install cmds/findfile/findfile.go
@@ -63,62 +62,62 @@ install:
 	env GOBIN=$(HOME)/bin go install cmds/urlparse/urlparse.go
 
 dist/linux-amd64:
-	env CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o dist/linux-amd64/findfile cmds/findfile/findfile.go
-	env CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o dist/linux-amd64/finddir cmds/finddir/finddir.go
-	env CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o dist/linux-amd64/mergepath cmds/mergepath/mergepath.go
-	env CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o dist/linux-amd64/reldate cmds/reldate/reldate.go
-	env CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o dist/linux-amd64/range cmds/range/range.go
-	env CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o dist/linux-amd64/timefmt cmds/timefmt/timefmt.go
-	env CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o dist/linux-amd64/urlparse cmds/urlparse/urlparse.go
+	mkdir -p dist/bin
+	env CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o dist/bin/findfile cmds/findfile/findfile.go
+	env CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o dist/bin/finddir cmds/finddir/finddir.go
+	env CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o dist/bin/mergepath cmds/mergepath/mergepath.go
+	env CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o dist/bin/reldate cmds/reldate/reldate.go
+	env CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o dist/bin/range cmds/range/range.go
+	env CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o dist/bin/timefmt cmds/timefmt/timefmt.go
+	env CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o dist/bin/urlparse cmds/urlparse/urlparse.go
+	cd dist && zip -r $(PROJECT)-$(VERSION)-linux-amd64.zip README.md LICENSE INSTALL.md docs/* bin/*
+	rm -fR dist/bin
+
 
 dist/macosx-amd64:
-	env CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -o dist/macosx-amd64/findfile cmds/findfile/findfile.go
-	env CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -o dist/macosx-amd64/finddir cmds/finddir/finddir.go
-	env CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -o dist/macosx-amd64/mergepath cmds/mergepath/mergepath.go
-	env CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -o dist/macosx-amd64/reldate cmds/reldate/reldate.go
-	env CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -o dist/macosx-amd64/range cmds/range/range.go
-	env CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -o dist/macosx-amd64/timefmt cmds/timefmt/timefmt.go
-	env CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -o dist/macosx-amd64/urlparse cmds/urlparse/urlparse.go
+	mkdir -p dist/bin
+	env CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -o dist/bin/findfile cmds/findfile/findfile.go
+	env CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -o dist/bin/finddir cmds/finddir/finddir.go
+	env CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -o dist/bin/mergepath cmds/mergepath/mergepath.go
+	env CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -o dist/bin/reldate cmds/reldate/reldate.go
+	env CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -o dist/bin/range cmds/range/range.go
+	env CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -o dist/bin/timefmt cmds/timefmt/timefmt.go
+	env CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -o dist/bin/urlparse cmds/urlparse/urlparse.go
+	cd dist && zip -r $(PROJECT)-$(VERSION)-macosx-amd64.zip README.md LICENSE INSTALL.md docs/* bin/*
+	rm -fR dist/bin
 
 dist/windows-amd64:
-	env CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -o dist/windows-amd64/findfile.exe cmds/findfile/findfile.go
-	env CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -o dist/windows-amd64/finddir.exe cmds/finddir/finddir.go
-	env CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -o dist/windows-amd64/mergepath.exe cmds/mergepath/mergepath.go
-	env CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -o dist/windows-amd64/reldate.exe cmds/reldate/reldate.go
-	env CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -o dist/windows-amd64/range.exe cmds/range/range.go
-	env CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -o dist/windows-amd64/timefmt.exe cmds/timefmt/timefmt.go
-	env CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -o dist/windows-amd64/urlparse.exe cmds/urlparse/urlparse.go
+	mkdir -p dist/bin
+	env CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -o dist/bin/findfile.exe cmds/findfile/findfile.go
+	env CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -o dist/bin/finddir.exe cmds/finddir/finddir.go
+	env CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -o dist/bin/mergepath.exe cmds/mergepath/mergepath.go
+	env CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -o dist/bin/reldate.exe cmds/reldate/reldate.go
+	env CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -o dist/bin/range.exe cmds/range/range.go
+	env CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -o dist/bin/timefmt.exe cmds/timefmt/timefmt.go
+	env CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -o dist/bin/urlparse.exe cmds/urlparse/urlparse.go
+	cd dist && zip -r $(PROJECT)-$(VERSION)-windows-amd64.zip README.md LICENSE INSTALL.md docs/* bin/*
+	rm -fR dist/bin
 
 dist/raspbian-arm7:
-	env CGO_ENABLED=0 GOOS=linux GOARCH=arm GOARM=7 go build -o dist/raspbian-arm7/findfile cmds/findfile/findfile.go
-	env CGO_ENABLED=0 GOOS=linux GOARCH=arm GOARM=7 go build -o dist/raspbian-arm7/finddir cmds/finddir/finddir.go
-	env CGO_ENABLED=0 GOOS=linux GOARCH=arm GOARM=7 go build -o dist/raspbian-arm7/mergepath cmds/mergepath/mergepath.go
-	env CGO_ENABLED=0 GOOS=linux GOARCH=arm GOARM=7 go build -o dist/raspbian-arm7/reldate cmds/reldate/reldate.go
-	env CGO_ENABLED=0 GOOS=linux GOARCH=arm GOARM=7 go build -o dist/raspbian-arm7/range cmds/range/range.go
-	env CGO_ENABLED=0 GOOS=linux GOARCH=arm GOARM=7 go build -o dist/raspbian-arm7/timefmt cmds/timefmt/timefmt.go
-	env CGO_ENABLED=0 GOOS=linux GOARCH=arm GOARM=7 go build -o dist/raspbian-arm7/urlparse cmds/urlparse/urlparse.go
+	mkdir -p dist/bin
+	env CGO_ENABLED=0 GOOS=linux GOARCH=arm GOARM=7 go build -o dist/bin/findfile cmds/findfile/findfile.go
+	env CGO_ENABLED=0 GOOS=linux GOARCH=arm GOARM=7 go build -o dist/bin/finddir cmds/finddir/finddir.go
+	env CGO_ENABLED=0 GOOS=linux GOARCH=arm GOARM=7 go build -o dist/bin/mergepath cmds/mergepath/mergepath.go
+	env CGO_ENABLED=0 GOOS=linux GOARCH=arm GOARM=7 go build -o dist/bin/reldate cmds/reldate/reldate.go
+	env CGO_ENABLED=0 GOOS=linux GOARCH=arm GOARM=7 go build -o dist/bin/range cmds/range/range.go
+	env CGO_ENABLED=0 GOOS=linux GOARCH=arm GOARM=7 go build -o dist/bin/timefmt cmds/timefmt/timefmt.go
+	env CGO_ENABLED=0 GOOS=linux GOARCH=arm GOARM=7 go build -o dist/bin/urlparse cmds/urlparse/urlparse.go
+	cd dist && zip -r $(PROJECT)-$(VERSION)-raspbian-arm7.zip README.md LICENSE INSTALL.md docs/* bin/*
+	rm -fR dist/bin
 
-dist/raspbian-arm6:
-	env CGO_ENABLED=0 GOOS=linux GOARCH=arm GOARM=6 go build -o dist/raspbian-arm6/findfile cmds/findfile/findfile.go
-	env CGO_ENABLED=0 GOOS=linux GOARCH=arm GOARM=6 go build -o dist/raspbian-arm6/finddir cmds/finddir/finddir.go
-	env CGO_ENABLED=0 GOOS=linux GOARCH=arm GOARM=6 go build -o dist/raspbian-arm6/mergepath cmds/mergepath/mergepath.go
-	env CGO_ENABLED=0 GOOS=linux GOARCH=arm GOARM=6 go build -o dist/raspbian-arm6/reldate cmds/reldate/reldate.go
-	env CGO_ENABLED=0 GOOS=linux GOARCH=arm GOARM=6 go build -o dist/raspbian-arm6/range cmds/range/range.go
-	env CGO_ENABLED=0 GOOS=linux GOARCH=arm GOARM=6 go build -o dist/raspbian-arm6/timefmt cmds/timefmt/timefmt.go
-	env CGO_ENABLED=0 GOOS=linux GOARCH=arm GOARM=6 go build -o dist/raspbian-arm6/urlparse cmds/urlparse/urlparse.go
-
-release: dist/linux-amd64 dist/macosx-amd64 dist/windows-amd64 dist/raspbian-arm7 dist/raspbian-arm6
-	mkdir -p dist
+distribute_docs:
+	mkdir -p dist/docs
 	cp -v README.md dist/
 	cp -v LICENSE dist/
 	cp -v INSTALL.md dist/
-	cp -vR demo dist/
-	cp -v findfile.md dist/
-	cp -v finddir.md dist/
-	cp -v mergepath.md dist/
-	cp -v reldate.md dist/
-	cp -v range.md dist/
-	cp -v timefmt.md dist/
-	cp -v urlparse.md dist/
-	zip -r $(PROJECT)-$(VERSION)-release.zip dist/*
+	cp -v docs/*.md dist/docs/
+	rm dist/docs/nav.md
+	cp -vR demos dist/
+
+release: distribute_docs dist/linux-amd64 dist/macosx-amd64 dist/windows-amd64 dist/raspbian-arm7
 
